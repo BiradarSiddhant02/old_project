@@ -1,0 +1,286 @@
+#VRML_SIM R2023a utf8
+
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023a/projects/objects/floors/protos/RectangleArena.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023a/projects/objects/backgrounds/protos/TexturedBackground.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023a/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023a/projects/objects/factory/containers/protos/WoodenBox.proto"
+
+WorldInfo {
+  basicTimeStep 100
+  coordinateSystem "NUE"
+}
+Viewpoint {
+  orientation -0.3018898659999085 0.6957040006347968 0.6518116693549572 3.668095637482464
+  position 2.608448851004633 2.1187565685705168 0.7070356325417214
+}
+TexturedBackground {
+}
+TexturedBackgroundLight {
+}
+RectangleArena {
+  translation 0.531391 6.66134e-16 0.583575
+  rotation 1 0 0 -1.5707953071795862
+  floorSize 1.1 1.1
+  floorTileSize 0.2 0.2
+}
+Transform {
+  translation 0.03 0.001 0.08
+  rotation -1 0 0 1.5707963267948966
+  children [
+    Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 1 0 0
+        }
+      }
+      geometry Plane {
+        size 0.1 0.1
+      }
+    }
+  ]
+}
+Transform {
+  translation 1.03 0.001 0.0800019
+  rotation -0.9999999999929585 2.6535897932209227e-06 2.6535897932209227e-06 1.570796326801938
+  children [
+    Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 1 1 0
+        }
+      }
+      geometry Plane {
+        size 0.1 0.1
+      }
+    }
+  ]
+}
+Transform {
+  translation 1.03 0.001 1.08
+  rotation -1 0 0 1.5707963267948966
+  children [
+    Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 0 1 0
+        }
+      }
+      geometry Plane {
+        size 0.1 0.1
+      }
+    }
+  ]
+}
+Transform {
+  translation 0.03 0.001 1.08
+  rotation -1 0 0 1.5707963267948966
+  children [
+    Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 0 0 1
+        }
+      }
+      geometry Plane {
+        size 0.1 0.1
+      }
+    }
+  ]
+}
+WoodenBox {
+  translation 0.43 0.05 0.78
+  name "stelling4"
+  size 0.1 0.1 0.3
+}
+WoodenBox {
+  translation 0.23 0.05 0.78
+  name "stelling3"
+  size 0.1 0.1 0.3
+}
+WoodenBox {
+  translation 0.53 0.05 0.48
+  name "stelling2"
+  size 0.7 0.1 0.1
+}
+WoodenBox {
+  translation 0.83 0.05 0.78
+  name "stelling"
+  size 0.1 0.1 0.3
+}
+WoodenBox {
+  translation 0.63 0.05 0.78
+  name "stelling5"
+  size 0.1 0.1 0.3
+}
+WoodenBox {
+  translation 0.53 0.05 0.28
+  name "stelling1"
+  size 0.7 0.1 0.1
+}
+Robot {
+  translation 0.1 0.01 1.1
+  rotation -2.3464099999035754e-06 0.9999999999589054 8.75691999964014e-06 0.5235989999999997
+  children [
+    LED {
+      translation -0.07 0.09 -0.06
+      children [
+        DEF led Shape {
+          appearance PBRAppearance {
+            baseColor 0 0 1
+            metalness 0
+          }
+          geometry Sphere {
+            radius 0.01
+          }
+        }
+      ]
+      name "led_left"
+      boundingObject USE led
+    }
+    LED {
+      translation -0.05 0.09 -0.02
+      children [
+        DEF led Shape {
+          appearance PBRAppearance {
+            baseColor 0 0 1
+            metalness 0
+          }
+          geometry Sphere {
+            radius 0.01
+          }
+        }
+      ]
+      name "led_behind"
+      boundingObject USE led
+    }
+    LED {
+      translation -0.03 0.09 -0.08
+      children [
+        DEF led Shape {
+          appearance PBRAppearance {
+            baseColor 0 0 1
+            metalness 0
+          }
+          geometry Sphere {
+            radius 0.01
+          }
+        }
+      ]
+      name "led_forward"
+      boundingObject USE led
+    }
+    LED {
+      translation -0.01 0.09 -0.04
+      children [
+        DEF led Shape {
+          appearance PBRAppearance {
+            baseColor 0 0 1
+            metalness 0
+          }
+          geometry Sphere {
+            radius 0.01
+          }
+        }
+      ]
+      name "led_right"
+      boundingObject USE led
+    }
+    DistanceSensor {
+      translation -0.0939427915010681 0.04999108037216528 -0.07904100002093262
+      rotation 1.44028221901256e-16 0.9999999999999999 1.548281188977259e-16 2.5999999999999996
+      children [
+        DEF sensor Shape {
+          appearance PBRAppearance {
+            baseColor 0 1 0
+            metalness 0
+          }
+          geometry Box {
+            size 0.01 0.01 0.01
+          }
+        }
+      ]
+      name "ds_left"
+      boundingObject USE sensor
+      physics Physics {
+      }
+    }
+    Solid {
+      translation -0.05 0.04 -0.05
+      rotation 0 1 0 2.61799
+      children [
+        DEF body Shape {
+          appearance PBRAppearance {
+            baseColor 1 1 0
+            metalness 0
+          }
+          geometry Box {
+            size 0.1 0.1 0.1
+          }
+        }
+      ]
+      boundingObject USE body
+    }
+    DistanceSensor {
+      translation -0.07167699150106543 0.04999108037216605 -0.008185950020934363
+      rotation -1.649226994458875e-16 -1 1.8965919180413362e-16 2.0000000000000013
+      children [
+        DEF sensor Shape {
+          appearance PBRAppearance {
+            baseColor 0 1 0
+            metalness 0
+          }
+          geometry Box {
+            size 0.01 0.01 0.01
+          }
+        }
+      ]
+      name "ds_behind"
+      boundingObject USE sensor
+      physics Physics {
+      }
+    }
+    DistanceSensor {
+      translation -0.006506731501069285 0.04999108037216578 -0.03129280002093471
+      rotation -7.050784979191568e-17 -1 4.108850218944921e-16 0.5999999999999983
+      children [
+        DEF sensor Shape {
+          appearance PBRAppearance {
+            baseColor 0 1 0
+            metalness 0
+          }
+          geometry Box {
+            size 0.01 0.01 0.01
+          }
+        }
+      ]
+      name "ds_right"
+      boundingObject USE sensor
+      physics Physics {
+      }
+    }
+    DistanceSensor {
+      translation -0.0199999915010709 0.049991080372165576 -0.09000000002093511
+      rotation -3.5335328598486755e-21 1 -4.4143454296553046e-16 0.9999999999999996
+      children [
+        DEF sensor Shape {
+          appearance PBRAppearance {
+            baseColor 0 1 0
+            metalness 0
+          }
+          geometry Box {
+            size 0.01 0.01 0.01
+          }
+        }
+      ]
+      name "ds_forward"
+      boundingObject USE sensor
+      physics Physics {
+      }
+    }
+  ]
+  controller "client_controller"
+  controllerArgs [
+    ""
+  ]
+  supervisor TRUE
+}

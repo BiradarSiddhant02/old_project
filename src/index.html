@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Websockets client</title> 
+</head>
+    <body>
+        <canvas id="theCanvas" width="260" height="260" style="background-color: grey;">
+
+        </canvas>
+        <label style="vertical-align: auto;">Response console:</label>
+        <textarea id="console" style="width:600px;height:235px; resize: none;" readonly></textarea>
+        <br><br>
+        <h5>-Assign a Webot a new position-------Stop a webot-----</h5>
+        <label for="wid">Webot id___ :</label>
+        <input type="number" id="wid" name="wid" min="1" max="11">
+        <button id="changePos">Assign position</button>
+        <button id="stopButton">Stop all button</button><br>
+
+        <label for="xpos">X coordinate :</label>
+        <input type="number" id="xpos" name="xpos" min="1" max="11"><br>
+        <label for="zpos">Z coordinate :</label>
+        <input type="number" id="zpos" name="zpos" min="1" max="11"><br>
+        
+
+        <script src = "https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+        <script>
+            const NROFBOTS = 4;
+            //Dashboard
+            CanvasRenderingContext2D.prototype.clear = function (){
+                this.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            }
+
+            CanvasRenderingContext2D.prototype.drawBlock = function(x, y){
+                this.fillRect(20 * x, 20 * y, 20, 20);
+            }
+            function buttonEventListener(id, functionCall) {
+                document.getElementById(id).addEventListener("click", functionCall);
+            }
+
+            buttonEventListener("changePos", () => {
+                ws.send('{"instruction":"changePos", "sender":"dashboard", "content":"'+document.getElementById("wid").value +
+                ','+document.getElementById("xpos").value+','+document.getElementById("zpos").value+ '"}');
+            });
+
+            buttonEventListener("stopButton", () => {
+                ws.send('{"instruction":"stopwebots", "sender":"dashboard", "content":""}');
+                console.log("test");
+            });
+                  
+
+            let context = document.getElementById("theCanvas").getContext("2d");
+
+            function draw(){
+                context.clear();
+                for(let i = 0; i < 13; i++){
+                    context.fillStyle = "brown";
+                    context.drawBlock(i,0);
+                    context.drawBlock(0,i);
+                    context.drawBlock(i,12);
+                    context.drawBlock(12,i);
+                }
+
+
+                for(let i = 3; i < 10; i++){
+                    context.fillStyle = "brown";
+                    context.drawBlock(i,3);
+                    context.drawBlock(i,5);
+                }
+                
+                for(let i = 7; i < 10; i++){
+                    context.fillStyle = "brown";
+                    context.drawBlock(3,i);
+                    context.drawBlock(5,i);
+                    context.drawBlock(7,i);
+                    context.drawBlock(9,i);
+                }
+             
+            }
+            draw();
+
+            //Websocket
+            let ws = new WebSocket("ws://localhost:8765");
+            function get_data() {
+                //requests data
+                ws.send('{"instruction":"request_obs", "sender":"dashboard", "content":""}');
+                for(let i = 1; i <= NROFBOTS; i++){
+                    ws.send('{"instruction":"request_pos_update", "sender":"dashboard", "content":'+ i +'}');
+                }
+                
+            }
+            ws.onmessage = function(message) {
+
+                //Filter messages here
+                //document.getElementById('console').innerText += message.data + "\n";
+                packet = JSON.parse(message.data);
+                if(packet['instruction'] == "response_pos_update"){
+                    //Remove the junk from the content string and keep a usable array.
+                    //content = String(packet['content']).split('-').join(',').split('(').join(',').split(')').join(',').split(',');
+                    let updateData = String(packet['content']).split('webot-').join('').split('(').join(',')
+                                        .split(')').join(',').split("'").join(',').split(",,").join(',').split(", ,").join(',').split(",,").join(',').split(", ").join(',');
+                    dataArray = updateData.split(',');
+                    if(parseInt(dataArray[1]) != 0 && parseInt(dataArray[2]) != 0)
+                        switch(dataArray[0]){
+                            case '1':
+                                context.fillStyle = "grey";
+                                context.drawBlock(parseInt(dataArray[3]),parseInt(dataArray[4]));
+                                context.fillStyle = "red";
+                                context.drawBlock(parseInt(dataArray[1]),parseInt(dataArray[2]));
+                                break;
+                            case '2':
+                                context.fillStyle = "grey";
+                                context.drawBlock(parseInt(dataArray[3]),parseInt(dataArray[4]));
+                                context.fillStyle = "yellow";
+                                context.drawBlock(parseInt(dataArray[1]),parseInt(dataArray[2]));
+                                break;
+                            case '3':
+                                context.fillStyle = "grey";
+                                context.drawBlock(parseInt(dataArray[3]),parseInt(dataArray[4]));
+                                context.fillStyle = "green";
+                                context.drawBlock(parseInt(dataArray[1]),parseInt(dataArray[2]));
+                                break;
+                            case '4':
+                                context.fillStyle = "grey";
+                                context.drawBlock(parseInt(dataArray[3]),parseInt(dataArray[4]));
+                                context.fillStyle = "blue";
+                                context.drawBlock(parseInt(dataArray[1]),parseInt(dataArray[2]));
+                                break;
+                        }
+                    
+                    
+                } 
+                // else if (packet['instruction'] == "add_obs"){
+                //     if(packet['content'] != ""){
+                //         let updateData = String(packet['content']).split('webot-').join('').split('(').join(',')
+                //                         .split(')').join(',').split("'").join(',').split(",,").join(',').split(", ,").join(',').split(",,").join(',').split(", ").join(',');
+                //         dataArray = updateData.split(',');
+                //         context.fillStyle = "brown";
+                //         console.log(dataArray);
+                //         context.drawBlock(parseInt(dataArray[1]),parseInt(dataArray[2]));
+                //     }
+                // }
+                loadLog(message.data);
+            }
+
+            
+
+            //Console
+            function loadLog(logValue) {
+                consoleText = document.getElementById("console")
+                consoleText.value += logValue;
+                scrollBottom();
+            }
+
+            function scrollBottom() {
+                $(document).ready(function(){
+                    var $text = $('#console');
+                    $text.scrollTop($text[0].scrollHeight);
+                 });
+            }   
+            
+                 
+            setInterval(get_data, 500);
+
+        </script>
+        
+    </body>
+</html>
